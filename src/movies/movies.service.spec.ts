@@ -15,4 +15,19 @@ describe('MoviesService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  it('should return all movies', () => {
+    const movies = service.getmovies();
+    expect(movies).toHaveLength(10);
+  });
+
+  it('should return a movie by id', () => {
+    const movie = service.movieById(3);
+
+    expect(movie.title).toBe('Parasite');
+  });
+
+  it('should throw NotFoundException for an invalid id', () => {
+    expect(() => service.movieById(999)).toThrow('Movie not found');
+  });
 });
