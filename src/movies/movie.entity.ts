@@ -1,11 +1,16 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('movies')
+@Index('movies_year_idx', ['releaseYear'])
 export class Movie {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ type: 'uuid' })
+  @Column({
+    type: 'uuid',
+    unique: true,
+    default: () => 'gen_random_uuid()',
+  })
   uuid!: string;
 
   @Column({ type: 'text' })
