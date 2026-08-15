@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
+import { BadRequestException } from '@nestjs/common';
 
 type Movie = {
   id: number;
@@ -41,6 +42,10 @@ export class MoviesService {
   }
 
   create(movie: CreateMovieDto) {
+    if (movie.release_year > new Date().getFullYear()) {
+      throw new BadRequestException('Release year cannot be in the future');
+    }
+
     const newMovie: Movie = {
       id: this.movies.length + 1,
       ...movie,
