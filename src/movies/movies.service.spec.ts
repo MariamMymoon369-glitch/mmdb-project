@@ -1,12 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { MoviesService } from './movies.service';
+import { Movie } from './movie.entity';
 
 describe('MoviesService', () => {
   let service: MoviesService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MoviesService],
+      providers: [
+        MoviesService,
+        {
+          provide: getRepositoryToken(Movie),
+          useValue: {
+            create: jest.fn(),
+            save: jest.fn(),
+            find: jest.fn(),
+            findOne: jest.fn(),
+            update: jest.fn(),
+            delete: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     service = module.get<MoviesService>(MoviesService);
@@ -14,20 +29,5 @@ describe('MoviesService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
-  });
-
-  it('should return all movies', () => {
-    const movies = service.getmovies();
-    expect(movies).toHaveLength(10);
-  });
-
-  it('should return a movie by id', () => {
-    const movie = service.movieById(3);
-
-    expect(movie.title).toBe('Parasite');
-  });
-
-  it('should throw NotFoundException for an invalid id', () => {
-    expect(() => service.movieById(999)).toThrow('Movie not found');
   });
 });

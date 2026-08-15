@@ -1,45 +1,35 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
-import { CreateMovieDto } from './dto/create-movie.dto';
 import { Movie } from './movie.entity';
+import { CreateMovieDto } from './dto/create-movie.dto';
 
 @Injectable()
 export class MoviesService {
   constructor(
     @InjectRepository(Movie)
-    private readonly movieRepository: Repository<Movie>,
+    private moviesRepository: Repository<Movie>,
   ) {}
 
-  getmovies() {
-    return this.movieRepository.find();
+  async create(createMovieDto: CreateMovieDto): Promise<Movie> {
+    const movie = this.moviesRepository.create(createMovieDto);
+    return await this.moviesRepository.save(movie);
   }
 
-  async movieById(id: number) {
-    const movie = await this.movieRepository.findOneBy({ id });
-
-    if (!movie) {
-      throw new NotFoundException('Movie not found');
-    }
-
-    return movie;
+  async findAll(): Promise<Movie[]> {
+    return await this.moviesRepository.find();
   }
 
-  async create(movie: CreateMovieDto) {
-    if (movie.release_year > new Date().getFullYear()) {
-      throw new BadRequestException('Release year cannot be in the future');
-    }
+  async findOne(id: number): Promise<Movie | null> {
+    return await this.moviesRepository.findOne({ where: { id } });
+  }
 
-    const newMovie = this.movieRepository.create({
-      title: movie.title,
-      releaseYear: movie.release_year,
-    });
+  async update(id: number, updateMovieDto: CreateMovieDto): Promise<Movie | null> {
+    await this.moviesRepository.update(id, updateMovieDto);
+    return await this.findOne(id);
+  }
 
-    return this.movieRepository.save(newMovie);
+  async remove(id: number): Promise<void> {
+    await this.moviesRepository.delete(id);
   }
 }

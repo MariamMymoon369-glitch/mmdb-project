@@ -1,24 +1,45 @@
-import { Controller, Get, Param, Post, Header, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+} from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
+import { Movie } from './movie.entity';
 
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
-  @Get()
-  async findAll() {
-    return this.moviesService.getmovies();
-  }
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    const movie = await this.moviesService.movieById(Number(id));
-    return movie || { error: 'Movie not found' };
+  @Post()
+  async create(@Body() createMovieDto: CreateMovieDto): Promise<Movie> {
+    return await this.moviesService.create(createMovieDto);
   }
 
-  @Post()
-  @Header('Cache-Control', 'no-store')
-  create(@Body() createMovieDto: CreateMovieDto) {
-    return this.moviesService.create(createMovieDto);
+  @Get()
+  async findAll(): Promise<Movie[]> {
+    return await this.moviesService.findAll();
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string): Promise<Movie | null> {
+    return await this.moviesService.findOne(Number(id));
+  }
+
+  @Put(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() updateMovieDto: CreateMovieDto,
+  ): Promise<Movie | null> {
+    return await this.moviesService.update(Number(id), updateMovieDto);
+  }
+
+  @Delete(':id')
+  async remove(@Param('id') id: string): Promise<void> {
+    return await this.moviesService.remove(Number(id));
   }
 }
