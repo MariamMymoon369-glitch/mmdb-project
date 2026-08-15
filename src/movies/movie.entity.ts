@@ -1,0 +1,31 @@
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+@Entity('movies')
+export class Movie {
+  @PrimaryGeneratedColumn()
+  id!: number;
+
+  @Column({ type: 'uuid' })
+  uuid!: string;
+
+  @Column({ type: 'text' })
+  title!: string;
+
+  @Column({ type: 'int', name: 'release_year' })
+  releaseYear!: number;
+
+  @Column({ type: 'int', name: 'runtime_minutes', nullable: true })
+  runtimeMinutes: number | null = null;
+
+  @Column({ type: 'text', nullable: true })
+  overview: string | null = null;
+
+  @Column({ type: 'text', name: 'poster_url', nullable: true })
+  posterUrl: string | null = null;
+
+  @Column({ type: 'text', name: 'trailer_url', nullable: true })
+  trailerUrl: string | null = null;
+
+  @Column({ type: 'text', nullable: true })
+  language: string | null = null;
+}

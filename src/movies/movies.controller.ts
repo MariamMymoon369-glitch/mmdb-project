@@ -7,12 +7,12 @@ export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
   @Get()
-  findAll(): any[] {
+  async findAll() {
     return this.moviesService.getmovies();
   }
   @Get(':id')
-  findOne(@Param('id') id: string): any {
-    const movie = this.moviesService.movieById(Number(id));
+  async findOne(@Param('id') id: string) {
+    const movie = await this.moviesService.movieById(Number(id));
     return movie || { error: 'Movie not found' };
   }
 
