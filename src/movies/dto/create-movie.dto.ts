@@ -1,7 +1,7 @@
 export class CreateMovieDto {
-  uuid: string;
-  title: string;
-  releaseYear: number;
+  uuid!: string;
+  title!: string;
+  releaseYear!: number;
   runtimeMinutes?: number | null;
   overview?: string | null;
   posterUrl?: string | null;
