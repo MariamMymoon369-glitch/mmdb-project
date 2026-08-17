@@ -24,7 +24,10 @@ export class MoviesService {
     return await this.moviesRepository.findOne({ where: { id } });
   }
 
-  async update(id: number, updateMovieDto: CreateMovieDto): Promise<Movie | null> {
+  async update(
+    id: number,
+    updateMovieDto: CreateMovieDto,
+  ): Promise<Movie | null> {
     await this.moviesRepository.update(id, updateMovieDto);
     return await this.findOne(id);
   }
