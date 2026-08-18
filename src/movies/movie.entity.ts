@@ -1,4 +1,12 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  PrimaryGeneratedColumn,
+  OneToMany,
+} from 'typeorm';
+
+import { MovieCast } from './movie-cast.entity';
 
 @Entity('movies')
 @Index('movies_year_idx', ['releaseYear'])
@@ -33,4 +41,7 @@ export class Movie {
 
   @Column({ type: 'text', nullable: true })
   language: string | null = null;
+
+  @OneToMany(() => MovieCast, (movieCast: MovieCast) => movieCast.movie)
+  cast!: MovieCast[];
 }

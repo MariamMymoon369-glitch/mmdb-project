@@ -3,12 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Movie } from './movie.entity';
 import { CreateMovieDto } from './dto/create-movie.dto';
+import { MovieCast } from './movie-cast.entity';
 
 @Injectable()
 export class MoviesService {
   constructor(
     @InjectRepository(Movie)
-    private moviesRepository: Repository<Movie>,
+    private readonly moviesRepository: Repository<Movie>,
+    @InjectRepository(MovieCast)
+    private readonly movieCastsRepository: Repository<MovieCast>,
   ) {}
 
   async create(createMovieDto: CreateMovieDto): Promise<Movie> {
@@ -17,11 +20,14 @@ export class MoviesService {
   }
 
   async findAll(): Promise<Movie[]> {
-    return await this.moviesRepository.find();
+    return await this.moviesRepository
+      .createQueryBuilder('movie')
+      .leftJoinAndSelect('movie.cast', 'movieCast')
+      .leftJoinAndSelect('movieCast.person', 'person')
+      .getMany();
   }
 
-  async findOne(id: number): Promise<Movie> {
-    //: Promise<Movie | null>
+  async findOne(id: number): Promise<Movie | null> {
     const movie = await this.moviesRepository.findOne({ where: { id } });
 
     if (!movie) {

@@ -27,7 +27,7 @@ export class MoviesController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Movie> {
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Movie | null> {
     return await this.moviesService.findOne(id);
   }
 
