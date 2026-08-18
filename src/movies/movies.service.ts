@@ -19,6 +19,7 @@ export class MoviesService {
     return await this.moviesRepository.save(movie);
   }
 
+  // Find all movies with cast in one query
   async findAll(): Promise<Movie[]> {
     return await this.moviesRepository
       .createQueryBuilder('movie')
