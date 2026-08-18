@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   Put,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -26,8 +27,8 @@ export class MoviesController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Movie | null> {
-    return await this.moviesService.findOne(Number(id));
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Movie> {
+    return await this.moviesService.findOne(id);
   }
 
   @Put(':id')
