@@ -7,6 +7,7 @@ import {
   Delete,
   Put,
   ParseIntPipe,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -19,6 +20,11 @@ export class MoviesController {
   @Post()
   async create(@Body() createMovieDto: CreateMovieDto): Promise<Movie> {
     return await this.moviesService.create(createMovieDto);
+  }
+
+  @Get('test-error')
+  testError() {
+    throw new InternalServerErrorException('Test server error');
   }
 
   @Get()
