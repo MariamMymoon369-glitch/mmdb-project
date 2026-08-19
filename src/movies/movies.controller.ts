@@ -26,6 +26,11 @@ export class MoviesController {
     return await this.moviesService.findAll();
   }
 
+  //@Get('n-plus-one')
+  //async findAllNPlusOne(): Promise<Movie[]> {
+  // return await this.moviesService.findAllNPlusOne();
+  //}
+
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<Movie | null> {
     return await this.moviesService.findOne(id);

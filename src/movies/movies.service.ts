@@ -18,6 +18,27 @@ export class MoviesService {
     const movie = this.moviesRepository.create(createMovieDto);
     return await this.moviesRepository.save(movie);
   }
+  /*
+  // Find all movies with cast in n=1 query
+  async findAllNPlusOne(): Promise<Movie[]> {
+    const movies = await this.moviesRepository.find();
+
+    for (const movie of movies) {
+      const cast = await this.movieCastsRepository.find({
+        where: {
+          movieId: movie.id,
+        },
+        relations: {
+          person: true,
+        },
+      });
+
+      movie.cast = cast;
+    }
+
+    return movies;
+  }
+*/
 
   // Find all movies with cast in one query
   async findAll(): Promise<Movie[]> {
