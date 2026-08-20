@@ -1,9 +1,17 @@
-import { Column, Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  PrimaryColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 
 import { Movie } from './movie.entity';
 import { Person } from './people.entity';
 
 @Entity('movie_cast')
+@Index('movie_cast_person_idx', ['personId'])
 export class MovieCast {
   @PrimaryColumn({ type: 'int', name: 'movie_id' })
   movieId!: number;
@@ -24,11 +32,15 @@ export class MovieCast {
   })
   billingOrder!: number;
 
-  @ManyToOne(() => Movie)
+  @ManyToOne(() => Movie, (movie) => movie.cast, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'movie_id' })
   movie!: Movie;
 
-  @ManyToOne(() => Person)
+  @ManyToOne(() => Person, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'person_id' })
   person!: Person;
 }
