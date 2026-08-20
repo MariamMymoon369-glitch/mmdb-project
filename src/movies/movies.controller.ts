@@ -8,6 +8,7 @@ import {
   Put,
   ParseIntPipe,
   InternalServerErrorException,
+  Query,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -28,8 +29,11 @@ export class MoviesController {
   }
 
   @Get()
-  async findAll(): Promise<Movie[]> {
-    return await this.moviesService.findAll();
+  async findAll(
+    @Query('page', ParseIntPipe) page = 1,
+    @Query('limit', ParseIntPipe) limit = 10,
+  ): Promise<Movie[]> {
+    return await this.moviesService.findAll(Number(page), Number(limit));
   }
 
   //@Get('n-plus-one')

@@ -41,11 +41,14 @@ export class MoviesService {
 */
 
   // Find all movies with cast in one query
-  async findAll(): Promise<Movie[]> {
+  async findAll(page = 1, limit = 10): Promise<Movie[]> {
+    const skip = (page - 1) * limit;
     return await this.moviesRepository
       .createQueryBuilder('movie')
       .leftJoinAndSelect('movie.cast', 'movieCast')
       .leftJoinAndSelect('movieCast.person', 'person')
+      .skip(skip)
+      .take(limit)
       .getMany();
   }
 
